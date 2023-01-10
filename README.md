@@ -1,7 +1,7 @@
 # PROYECTO: PIZZERÍA DON RÉMOLO  
 # Equipo: Ninja's team
 
-![logo pizeria](https://imageshack.com/i/posERE1fj)
+![logo pizeria](https://i.postimg.cc/tgkrH0kf/logo-pizzeria.jpg)
 
 ### Menú de comidas para realizar pedidos online. Gestor de pedidos para el local. #idea3.
 

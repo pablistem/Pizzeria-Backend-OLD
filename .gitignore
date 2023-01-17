@@ -1,0 +1,10 @@
+
+#Folders
+node_modules/
+dist/
+data/
+coverage/
+
+#env
+.env
+.env.test

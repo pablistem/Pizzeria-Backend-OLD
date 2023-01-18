@@ -1,7 +1,23 @@
-import { User } from '../../domain/user.entity'
+import { User } from "../../domain/user.entity";
 
-export const fromModelToEntity = ({ id, email, verified, createdAt, updatedAt }: any): User => {
-  const userEntity = new User(id, email, verified, createdAt, updatedAt)
+export const fromModelToEntity = ({
+  id,
+  email,
+  name,
+  hash,
+  verified,
+  createdAt,
+  updatedAt,
+}: any): User => {
+  const userEntity = new User(
+    id,
+    email,
+    name,
+    hash,
+    verified,
+    createdAt,
+    updatedAt
+  );
 
-  return userEntity
-}
+  return userEntity;
+};

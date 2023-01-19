@@ -31,4 +31,20 @@ export class UserService {
 
     return user;
   }
+
+  async updateUser(id: number, body: any): Promise<User> {
+    if (body.hash) {
+      //Encrypted
+      const salt = bcrypt.genSaltSync();
+      body.hash = bcrypt.hashSync(body.hash, salt);
+    }
+
+    const userUpdated = await this.userRepository.updateUser(id, body);
+
+    if (!userUpdated) {
+      throw new UserNotFound(`Id: ${id} does not exits`);
+    }
+
+    return userUpdated;
+  }
 }

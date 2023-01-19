@@ -28,4 +28,20 @@ export class UserRepository implements IUserRepository {
 
     return fromModelToEntity(savedUser);
   }
+
+  async updateUser(id: number, body: Object): Promise<User | null> {
+    const userUpdated = await this.userModel.findOne({ where: { id } });
+
+    userUpdated?.set(body);
+
+    await userUpdated?.save();
+
+    return userUpdated === null ? null : fromModelToEntity(userUpdated);
+  }
+
+  async deleteUser(id: number): Promise<User | null> {
+    const userDeleted = await this.userModel.destroy({ where: { id } });
+
+    return userDeleted === null ? null : fromModelToEntity(userDeleted);
+  }
 }

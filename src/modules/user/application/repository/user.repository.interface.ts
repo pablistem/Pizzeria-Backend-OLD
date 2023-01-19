@@ -4,4 +4,6 @@ export interface IUserRepository {
   getUserById(userId: number): Promise<User | null>;
   getAllUser(): Promise<User[] | null>;
   saveUser(user: User): Promise<User>;
+  updateUser(id: number, body: Object): Promise<User | null>;
+  deleteUser(id: number): Promise<User | null>;
 }

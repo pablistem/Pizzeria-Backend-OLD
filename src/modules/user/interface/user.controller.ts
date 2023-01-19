@@ -16,6 +16,7 @@ export class UserController {
   configureRoutes(app: Application): void {
     app.get(`${this.baseRoute}`, this.getAllUsers.bind(this));
     app.post(`${this.baseRoute}`, this.addUser.bind(this));
+    app.get(`${this.baseRoute}/:id`, this.getOneUser.bind(this));
   }
 
   async getAllUsers(
@@ -52,6 +53,18 @@ export class UserController {
       );
 
       res.json(fromEntityToUserDto(savedUser));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getOneUser(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+
+    try {
+      const user = await this.userService.getOneUser(Number(id));
+
+      res.json(fromEntityToUserDto(user));
     } catch (error) {
       next(error);
     }

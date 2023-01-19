@@ -9,8 +9,10 @@ export class UserRepository implements IUserRepository {
     this.userModel = userModel as any;
   }
 
-  async getUserById(userId: number): Promise<User> {
-    throw new Error("Method not implemented.");
+  async getUserById(userId: number): Promise<User | null> {
+    const user = await this.userModel.findByPk(userId);
+
+    return user === null ? null : fromModelToEntity(user);
   }
 
   async getAllUser(): Promise<User[] | null> {

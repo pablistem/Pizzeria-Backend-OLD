@@ -1,8 +1,7 @@
-
-import { Model, Sequelize, DataTypes } from 'sequelize'
+import { Model, Sequelize, DataTypes } from "sequelize";
 
 export class UserModel extends Model<any> {
-  static setup (sequelizeInstance: Sequelize): typeof UserModel {
+  static setup(sequelizeInstance: Sequelize): typeof UserModel {
     UserModel.init(
       {
         id: {
@@ -10,31 +9,31 @@ export class UserModel extends Model<any> {
           primaryKey: true,
           autoIncrement: true,
           allowNull: false,
-          unique: true
+          unique: true,
         },
         email: {
           type: DataTypes.STRING,
           allowNull: false,
-          unique: true
+          unique: true,
         },
         name: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         hash: {
           type: DataTypes.STRING,
-          allowNull: false
-        }
+          allowNull: false,
+        },
       },
       {
         sequelize: sequelizeInstance,
-        modelName: 'User',
-        tableName: 'users',
+        modelName: "User",
+        tableName: "users",
         underscored: true,
-        paranoid: true
+        paranoid: true,
       }
-    )
+    );
 
-    return UserModel
+    return UserModel;
   }
 }

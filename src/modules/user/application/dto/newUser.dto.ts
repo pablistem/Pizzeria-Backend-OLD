@@ -1,37 +1,30 @@
-export class UserDto {
-  id: number;
+export class newUserDto {
   email: string;
   name: string;
-  verified: boolean | undefined;
+  hash: string;
 
   constructor({
-    id,
     email,
     name,
-    verified,
+    hash,
   }: {
-    id: number;
     email: string;
     name: string;
-    verified: boolean | undefined;
+    hash: string;
   }) {
-    this.id = id;
     this.email = email;
     this.name = name;
-    this.verified = verified;
+    this.hash = hash;
   }
 
   validate(): void {
-    if (this.id === undefined) {
-      throw new Error("Validation error");
-    }
     if (this.email === undefined) {
       throw new Error("Validation error");
     }
     if (this.name === undefined) {
       throw new Error("Validation error");
     }
-    if (this.verified === undefined) {
+    if (this.hash === undefined) {
       throw new Error("Validation error");
     }
   }

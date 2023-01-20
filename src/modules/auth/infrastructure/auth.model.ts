@@ -21,7 +21,7 @@ export class AuthModel extends Model<any> {
       {
         sequelize: sequelizeInstance,
         modelName: 'Auth',
-        tableName: 'Sessions',
+        tableName: 'auth',
         underscored: true,
         paranoid: true
       }

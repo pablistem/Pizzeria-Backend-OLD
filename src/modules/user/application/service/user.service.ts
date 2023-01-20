@@ -7,6 +7,9 @@ import { UserNotFound } from "../error/UserNotFound";
 import { emailExist } from "../error/emailExist";
 
 export class UserService {
+  getUserByEmail(email: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly userRepository: IUserRepository) {}
 
   async addUser(user: User): Promise<User> {

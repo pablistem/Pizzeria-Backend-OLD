@@ -1,5 +1,6 @@
 import DIContainer, { type IDIContainer, object, use, factory } from 'rsdi'
 import { Sequelize } from 'sequelize'
+import { AuthController, AuthService, AuthRepository, AuthModel } from '../modules/auth/auth.module'
 import { ProductModel } from '../modules/product/infrastructure/product.model'
 import { ProductController, ProductService, ProductRepository } from '../modules/product/product.module'
 import { UserModel } from '../modules/user/infrastructure/user.model'
@@ -19,7 +20,7 @@ const dbConfig = (): Sequelize => {
   }
 
   if (process.env.PROJECT_STATUS === 'test') {
-    const sequelize = new Sequelize('sqlite::memory:')
+    const sequelize = new Sequelize({dialect:'sqlite',storage:':memory:',logging: false,})
     return sequelize
   }
 
@@ -34,6 +35,12 @@ const dbConfig = (): Sequelize => {
   throw Error('PROJECT_STATUS env variable not found')
 }
 
+
+const configureAuthModel = (container: IDIContainer): typeof AuthModel => {
+  return AuthModel.setup(container.get('sequelize'))
+}
+
+
 const configureUserModel = (container: IDIContainer): typeof UserModel => {
   return UserModel.setup(container.get('sequelize'))
 }
@@ -45,6 +52,16 @@ const configureProductModel = (container: IDIContainer): typeof ProductModel => 
 const AddCommonDefinitions = (container: DIContainer): void => {
   container.add({
     sequelize: factory(dbConfig)
+  })
+}
+
+
+const AddAuthDefinitions = (container: DIContainer): void => {
+  container.add({
+    AuthController: object(AuthController).construct(use(AuthService)),
+    AuthService: object(AuthService).construct(use(AuthRepository),use(UserService)),
+    AuthModel: factory(configureAuthModel),
+    AuthRepository: object(AuthRepository).construct(use(AuthModel))
   })
 }
 
@@ -69,6 +86,7 @@ const AddProductDefinitions = (container: DIContainer): void => {
 export default function ConfigDIC (): DIContainer {
   const container = new DIContainer()
   AddCommonDefinitions(container)
+  AddAuthDefinitions(container)
   AddUserDefinitions(container)
   AddProductDefinitions(container);
   (container as IDIContainer).get('sequelize').sync()

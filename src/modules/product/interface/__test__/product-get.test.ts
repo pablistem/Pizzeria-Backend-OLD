@@ -1,11 +1,21 @@
 
 import AppBootstrapper from '../../../../__test__/appBootstrapper'
 import request from 'supertest'
+import { Application } from 'express'
+
+let app:Application
+
 
 describe('GET /product', () => {
-  const { app } = AppBootstrapper()
+  
 
+  beforeEach(()=>{
+    const { testApp } = AppBootstrapper()
+    app = testApp
+  })
   it('Gets all products', async () => {
-    await request(app).get('/product').then(({ body }) => { expect(body.products).toBeDefined() })
+    const response = await request(app).get('/product')
+
+    expect(await response.body.products).toBeDefined() 
   })
 })

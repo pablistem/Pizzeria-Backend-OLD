@@ -14,12 +14,12 @@ export class ProductController {
   ) {}
 
   configureRoutes(app: Application): void {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  
     app.get(`${this.baseRoute}`, this.getProducts.bind(this));
     app.post(`${this.baseRoute}`, this.addProduct.bind(this));
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+ 
   async getProducts(req: Request, res: Response): Promise<void> {
     const products = await this.productRepository.getAllProducts();
 

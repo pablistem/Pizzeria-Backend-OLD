@@ -15,7 +15,7 @@ export class UserController {
 
   configureRoutes(app: Application): void {
     app.get(`${this.baseRoute}`, this.getAllUsers.bind(this));
-    app.post(`${this.baseRoute}`, this.addUser.bind(this));
+    //app.post(`${this.baseRoute}`, this.addUser.bind(this));
     app.get(`${this.baseRoute}/:id`, this.getOneUser.bind(this));
     app.put(`${this.baseRoute}/:id`, this.updateUser.bind(this));
     app.delete(`${this.baseRoute}/:id`, this.deleteUser.bind(this));
@@ -37,28 +37,28 @@ export class UserController {
     }
   }
 
-  async addUser(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const { name, email, hash } = req.body;
+  // async addUser(
+  //   req: Request,
+  //   res: Response,
+  //   next: NextFunction
+  // ): Promise<void> {
+  //   const { name, email, hash } = req.body;
 
-    const user = { name, email, hash };
+  //   const user = { name, email, hash };
 
-    try {
-      const userDto = new newUserDto(user);
-      userDto.validate();
+  //   try {
+  //     const userDto = new newUserDto(user);
+  //     userDto.validate();
 
-      const savedUser = await this.userService.addUser(
-        fromNewUserDtoToEntity(userDto)
-      );
+  //     const savedUser = await this.userService.addUser(
+  //       fromNewUserDtoToEntity(userDto)
+  //     );
 
-      res.json(fromEntityToUserDto(savedUser));
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     res.json(fromEntityToUserDto(savedUser));
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   async getOneUser(
     req: Request,

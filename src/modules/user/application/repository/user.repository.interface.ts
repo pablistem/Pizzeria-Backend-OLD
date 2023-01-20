@@ -6,4 +6,5 @@ export interface IUserRepository {
   saveUser(user: User): Promise<User>;
   updateUser(id: number, body: Object): Promise<User | null>;
   deleteUser(id: number): Promise<User | null>;
+  existEmail(email: string): Promise<Boolean>;
 }

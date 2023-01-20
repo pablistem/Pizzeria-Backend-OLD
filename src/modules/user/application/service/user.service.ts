@@ -6,6 +6,9 @@ import { IUserRepository } from "../repository/user.repository.interface";
 import { UserNotFound } from "../error/UserNotFound";
 
 export class UserService {
+  getUserByEmail(email: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly userRepository: IUserRepository) {}
 
   async addUser(user: User): Promise<User> {

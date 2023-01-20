@@ -15,7 +15,7 @@ export class AuthController {
   configureRoutes(app: Application){
     app.post(`${this.baseRoute}/login`, this.login.bind(this));
     app.post(`${this.baseRoute}/signup`, this.signup.bind(this));
-    console.log('configured routes')
+ 
   }
 
   async login( req:Request, res: Response , next:NextFunction ) {
@@ -31,8 +31,14 @@ export class AuthController {
   }
 
  
-  async signup( dto: SignupDto) {
-    await this.authService.signup(dto);
+  async signup( req:Request, res: Response , next:NextFunction) {
+    const signupDto = new SignupDto(req.body)
+    try{
+      signupDto.validate()
+      res.json({ok:'ok'})
+    }catch(err){
+      next(err)
+    }
   }
 
   

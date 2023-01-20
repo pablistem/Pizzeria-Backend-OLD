@@ -20,7 +20,7 @@ const dbConfig = (): Sequelize => {
   }
 
   if (process.env.PROJECT_STATUS === 'test') {
-    const sequelize = new Sequelize('sqlite::memory:')
+    const sequelize = new Sequelize({dialect:'sqlite',storage:':memory:',logging: false,})
     return sequelize
   }
 

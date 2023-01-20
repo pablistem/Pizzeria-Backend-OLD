@@ -44,4 +44,10 @@ export class UserRepository implements IUserRepository {
 
     return userDeleted === null ? null : fromModelToEntity(userDeleted);
   }
+
+  async existEmail(email: string): Promise<Boolean> {
+    const existEmail = await this.userModel.findOne({ where: { email } });
+
+    return existEmail ? true : false;
+  }
 }

@@ -4,6 +4,7 @@ import { type UserRepository } from "../../infrastructure/user.repository";
 import { UserEntityNotDefined } from "../error/UserEntityNotDefined";
 import { IUserRepository } from "../repository/user.repository.interface";
 import { UserNotFound } from "../error/UserNotFound";
+import { emailExist } from "../error/emailExist";
 
 export class UserService {
   constructor(private readonly userRepository: IUserRepository) {}
@@ -11,6 +12,11 @@ export class UserService {
   async addUser(user: User): Promise<User> {
     if (!(user instanceof User)) {
       throw new UserEntityNotDefined();
+    }
+
+    const existEmail = await this.userRepository.existEmail(user.email);
+    if (existEmail) {
+      throw new emailExist(`The email ${user.email} is already in use`);
     }
 
     //Encrypted

@@ -1,11 +1,11 @@
 
-export default class Unauthorized extends Error {
+export class WrongPassword extends Error {
     code: number
     msg: string
     constructor () {
       super()
       this.name = this.constructor.name
-      this.msg = 'Not authorized'
-      this.code = 401
+      this.msg = 'Wrong Password'
+      this.code = 403
     }
   }

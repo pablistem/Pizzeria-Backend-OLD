@@ -10,11 +10,26 @@ export class UserService {
 
   constructor(private readonly userRepository: IUserRepository) {}
 
+
+
+  async getUserByEmail(email: string):Promise<User> {
+   const user =  await this.userRepository.getUserByEmail(email)
+ 
+   if(!user){
+    throw new UserNotFound(`User with email ${email} does not exits`)
+   }
+
+   return user
+  }
+
+
+
+
   async addUser(user: User): Promise<User> {
     if (!(user instanceof User)) {
       throw new UserEntityNotDefined();
     }
-
+    
     const savedUser = await this.userRepository.saveUser(user);
 
     return savedUser;

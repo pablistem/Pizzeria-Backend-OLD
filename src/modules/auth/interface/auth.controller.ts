@@ -22,20 +22,21 @@ export class AuthController {
      const loginDto =  new LoginDto(req.body)
     try{
       loginDto.validate()
-      res.json({ok:'Ok'});
+
+      const access_token = await this.authService.login(loginDto)
+      res.json({access_token});
     }
     catch(err){
       next(err)
     }
    
   }
-
- 
   async signup( req:Request, res: Response , next:NextFunction) {
     const signupDto = new SignupDto(req.body)
     try{
       signupDto.validate()
-      res.json({ok:'ok'})
+      await this.authService.signup(signupDto)
+      res.status(201).send()
     }catch(err){
       next(err)
     }

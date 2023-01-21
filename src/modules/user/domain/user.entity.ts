@@ -1,9 +1,16 @@
+export enum RoleEnum {
+  admin = 'admin',
+  user = 'user',
+} 
+
+
 export class User {
   email: string;
   name: string ;
   id: number | undefined;
   hash: string | undefined;
   verified: boolean | undefined;
+  role:string | undefined
   createdAt: string | undefined;
   updatedAt: string | undefined;
 
@@ -13,6 +20,7 @@ export class User {
     id?: number | undefined,
     hash?: string | undefined,
     verified?: boolean | undefined,
+    role?: string | undefined,
     createdAt?: string | undefined,
     updatedAt?: string | undefined
   ) {
@@ -21,6 +29,7 @@ export class User {
     this.name = name;
     this.hash = hash;
     this.verified = verified;
+    this.role = role
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

@@ -22,9 +22,12 @@ export class UserRepository implements IUserRepository {
   }
 
   async saveUser(user: User): Promise<User> {
-    const savedUser = await this.userModel.create(user as any, {
+    const savedUser = this.userModel.create(user as any, {
       isNewRecord: Number.isNaN(user.id),
     });
+
+  
+    
 
     return fromModelToEntity(savedUser);
   }
@@ -38,7 +41,11 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
+    
     const user = await this.userModel.findOne({ where: { email } });
+    if(user === null){
+      return null
+    }
     return fromModelToEntity(user);
   }
 }

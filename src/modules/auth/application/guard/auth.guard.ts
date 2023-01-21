@@ -1,5 +1,5 @@
 
-import Unauthorized from "../error/invalid.token.error"
+import {Unauthorized} from "../error"
 import jwt from 'jsonwebtoken'
 
 

@@ -1,7 +1,8 @@
 import { fromAuthModeltoEntity } from "../application/mapper/fromAuthModelToEntity"
+import { IAuthRepository } from "../application/repository/auth.repository.interface"
 import { Auth } from "../domain/auth.entity"
 import { AuthModel } from "./auth.model"
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository {
   private readonly authModel: typeof AuthModel
   constructor (authModel: AuthModel) {
     this.authModel = authModel as any

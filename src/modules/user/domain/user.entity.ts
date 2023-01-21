@@ -1,17 +1,17 @@
 export class User {
-  id: number | undefined;
   email: string;
-  name: string;
-  hash: string;
+  name: string ;
+  id: number | undefined;
+  hash: string | undefined;
   verified: boolean | undefined;
   createdAt: string | undefined;
   updatedAt: string | undefined;
 
   constructor(
-    id: number | undefined,
     email: string,
     name: string,
-    hash: string,
+    id?: number | undefined,
+    hash?: string | undefined,
     verified?: boolean | undefined,
     createdAt?: string | undefined,
     updatedAt?: string | undefined

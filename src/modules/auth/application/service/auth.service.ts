@@ -20,7 +20,7 @@ export class AuthService {
   async signup(signupDto: SignupDto) {
 
     const hash =  await argon2.hash(signupDto.password)
-    const newUser = new User(undefined,signupDto.email,'name',hash)
+    const newUser = new User(signupDto.email,'name',undefined,hash)
     const savedUser =  await this.userService.addUser(newUser)
     return { ok: 'ok'}
    

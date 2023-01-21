@@ -1,4 +1,4 @@
-export class emailExist extends Error {
+export class UserInUse extends Error {
   code: number;
   msg: string;
 

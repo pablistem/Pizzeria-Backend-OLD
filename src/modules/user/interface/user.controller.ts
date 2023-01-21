@@ -1,9 +1,6 @@
 import { Application, NextFunction, Request, Response } from "express";
-import { newUserDto } from "../application/dto/newUser.dto";
 import { IUserRepository } from "../application/repository/user.repository.interface";
 import { UserService } from "../application/service/user.service";
-import { UserRepository } from "../infrastructure/user.repository";
-import { fromNewUserDtoToEntity } from "../application/mapper/fromNewUserDtoToEntity";
 import { fromEntityToUserDto } from "../application/mapper/fromEntityToUserDto";
 
 export class UserController {
@@ -16,7 +13,8 @@ export class UserController {
   configureRoutes(app: Application): void {
     app.get(`${this.baseRoute}`, this.getAllUsers.bind(this));
     //app.post(`${this.baseRoute}`, this.addUser.bind(this));
-    app.get(`${this.baseRoute}/:id`, this.getOneUser.bind(this));
+    app.get(`${this.baseRoute}/id/:id`, this.getUserById.bind(this));
+    app.get(`${this.baseRoute}/email/:email`, this.getUserByEmail.bind(this));
     app.put(`${this.baseRoute}/:id`, this.updateUser.bind(this));
     app.delete(`${this.baseRoute}/:id`, this.deleteUser.bind(this));
   }
@@ -37,30 +35,23 @@ export class UserController {
     }
   }
 
-  // async addUser(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ): Promise<void> {
-  //   const { name, email, hash } = req.body;
+  async getUserByEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { email } = req.params;
 
-  //   const user = { name, email, hash };
+    try {
+      const user = await this.userService.getUserByEmail(email);
 
-  //   try {
-  //     const userDto = new newUserDto(user);
-  //     userDto.validate();
+      res.json(fromEntityToUserDto(user));
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  //     const savedUser = await this.userService.addUser(
-  //       fromNewUserDtoToEntity(userDto)
-  //     );
-
-  //     res.json(fromEntityToUserDto(savedUser));
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
-  async getOneUser(
+  async getUserById(
     req: Request,
     res: Response,
     next: NextFunction
@@ -68,7 +59,7 @@ export class UserController {
     const { id } = req.params;
 
     try {
-      const user = await this.userService.getOneUser(Number(id));
+      const user = await this.userService.getUserById(Number(id));
 
       res.json(fromEntityToUserDto(user));
     } catch (error) {
@@ -82,6 +73,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     const { id } = req.params;
+
     const { body } = req;
 
     try {
@@ -101,7 +93,7 @@ export class UserController {
     const { id } = req.params;
 
     try {
-      const userDeleted = await this.userRepository.deleteUser(Number(id));
+      await this.userService.deleteUser(Number(id));
 
       res.json({ message: "User deleted" });
     } catch (error) {

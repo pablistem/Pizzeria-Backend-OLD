@@ -1,18 +1,19 @@
 import Joi from "joi";
 import { UserValidation } from "../error/UserValidation";
-export class newUserDto {
-  email: string;
-  name: string;
-  hash: string;
+
+export class UserOptionalFiels {
+  email?: string;
+  name?: string;
+  hash?: string;
 
   constructor({
     email,
     name,
     hash,
   }: {
-    email: string;
-    name: string;
-    hash: string;
+    email?: string;
+    name?: string;
+    hash?: string;
   }) {
     this.email = email;
     this.name = name;
@@ -21,14 +22,14 @@ export class newUserDto {
 
   validate(): void {
     const schema = Joi.object({
-      email: Joi.string().email(),
-      name: Joi.string().min(3).max(30),
-      hash: Joi.string().min(8),
+      email: Joi.string().optional().email(),
+      name: Joi.string().optional().min(3).max(30),
+      hash: Joi.string().optional().min(8),
     });
 
     const { error } = schema.validate(this);
     if (error) {
-      throw new UserValidation("Error creating user", error);
+      throw new UserValidation("Update user failed", error);
     }
   }
 }

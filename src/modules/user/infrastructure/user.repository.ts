@@ -15,6 +15,12 @@ export class UserRepository implements IUserRepository {
     return user === null ? null : fromModelToEntity(user);
   }
 
+  async getUserByEmail(email: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ where: { email } });
+
+    return user === null ? null : fromModelToEntity(user);
+  }
+
   async getAllUser(): Promise<User[] | null> {
     const users = await this.userModel.findAll();
 
@@ -45,9 +51,9 @@ export class UserRepository implements IUserRepository {
     return userDeleted === null ? null : fromModelToEntity(userDeleted);
   }
 
-  async existEmail(email: string): Promise<Boolean> {
-    const existEmail = await this.userModel.findOne({ where: { email } });
+  async searchQuery(query: {}): Promise<User | null> {
+    const search = await this.userModel.findOne({ where: query });
 
-    return existEmail ? true : false;
+    return search === null ? null : fromModelToEntity(search);
   }
 }

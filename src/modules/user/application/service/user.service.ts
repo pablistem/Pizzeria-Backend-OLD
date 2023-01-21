@@ -1,37 +1,35 @@
-import bcrypt from "bcryptjs";
+import * as argon2 from "argon2";
 import { User } from "../../domain/user.entity";
-import { type UserRepository } from "../../infrastructure/user.repository";
-import { UserEntityNotDefined } from "../error/UserEntityNotDefined";
+import {
+  UserEntityNotDefined,
+  UserNotFound,
+  UserInUse,
+  UserIdIsNotANumber,
+} from "../error";
 import { IUserRepository } from "../repository/user.repository.interface";
-import { UserNotFound } from "../error/UserNotFound";
-import { emailExist } from "../error/emailExist";
+import { UserOptionalFiels } from "../dto/UserOptionalFiels.dto";
+import { newUserDto } from "../dto/newUser.dto";
 
 export class UserService {
-  getUserByEmail(email: any) {
-    throw new Error('Method not implemented.');
-  }
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async addUser(user: User): Promise<User> {
-    if (!(user instanceof User)) {
-      throw new UserEntityNotDefined();
+  async getUserByEmail(email: string) {
+    new UserOptionalFiels({ email }).validate();
+
+    const user = await this.userRepository.getUserByEmail(email);
+
+    if (!user) {
+      throw new UserNotFound(`User does not exist`);
     }
 
-    const existEmail = await this.userRepository.existEmail(user.email);
-    if (existEmail) {
-      throw new emailExist(`The email ${user.email} is already in use`);
-    }
-
-    //Encrypted
-    const salt = bcrypt.genSaltSync();
-    user.hash = bcrypt.hashSync(user.hash, salt);
-
-    const savedUser = await this.userRepository.saveUser(user);
-
-    return savedUser;
+    return user;
   }
 
-  async getOneUser(id: number): Promise<User> {
+  async getUserById(id: number): Promise<User> {
+    if (isNaN(id)) {
+      throw new UserIdIsNotANumber();
+    }
+
     const user = await this.userRepository.getUserById(id);
 
     if (!user) {
@@ -41,11 +39,37 @@ export class UserService {
     return user;
   }
 
+  async addUser(user: User): Promise<User> {
+    if (!(user instanceof User)) {
+      throw new UserEntityNotDefined();
+    }
+
+    new newUserDto(user).validate();
+
+    const existEmail = await this.userRepository.searchQuery({
+      email: user.email,
+    });
+    if (existEmail) {
+      throw new UserInUse(`user alredy in use`);
+    }
+
+    //Encrypted
+    user.hash = await argon2.hash(user.hash);
+
+    const savedUser = await this.userRepository.saveUser(user);
+
+    return savedUser;
+  }
+
   async updateUser(id: number, body: any): Promise<User> {
+    if (isNaN(id)) {
+      throw new UserIdIsNotANumber();
+    }
+    new UserOptionalFiels(body).validate();
+
     if (body.hash) {
       //Encrypted
-      const salt = bcrypt.genSaltSync();
-      body.hash = bcrypt.hashSync(body.hash, salt);
+      body.hash = await argon2.hash(body.hash);
     }
 
     const userUpdated = await this.userRepository.updateUser(id, body);
@@ -55,5 +79,13 @@ export class UserService {
     }
 
     return userUpdated;
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    if (isNaN(id)) {
+      throw new UserIdIsNotANumber();
+    }
+
+    await this.userRepository.deleteUser(id);
   }
 }

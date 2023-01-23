@@ -20,7 +20,11 @@ const dbConfig = (): Sequelize => {
   }
 
   if (process.env.PROJECT_STATUS === 'test') {
-    const sequelize = new Sequelize({dialect:'sqlite',storage:':memory:',logging: false,})
+    const sequelize = new Sequelize({
+      dialect: 'sqlite',
+      storage: `./data/test/test${Math.random()*1000}.db`,
+      logging: false,
+    })
     return sequelize
   }
 
@@ -60,8 +64,8 @@ const AddAuthDefinitions = (container: DIContainer): void => {
   container.add({
     AuthController: object(AuthController).construct(use(AuthService)),
     AuthService: object(AuthService).construct(use(AuthRepository),use(UserService)),
+    AuthRepository: object(AuthRepository).construct(use(AuthModel)),
     AuthModel: factory(configureAuthModel),
-    AuthRepository: object(AuthRepository).construct(use(AuthModel))
   })
 }
 
@@ -69,8 +73,8 @@ const AddUserDefinitions = (container: DIContainer): void => {
   container.add({
     UserController: object(UserController).construct(use(UserService), use(UserRepository)),
     UserService: object(UserService).construct(use(UserRepository)),
+    UserRepository: object(UserRepository).construct(use(UserModel)),
     UserModel: factory(configureUserModel),
-    UserRepository: object(UserRepository).construct(use(UserModel))
   })
 }
 
@@ -78,8 +82,8 @@ const AddProductDefinitions = (container: DIContainer): void => {
   container.add({
     ProductController: object(ProductController).construct(use(ProductService), use(ProductRepository)),
     ProductService: object(ProductService).construct(use(ProductRepository)),
+    ProductRepository: object(ProductRepository).construct(use(ProductModel)),
     ProductModel: factory(configureProductModel),
-    ProductRepository: object(ProductRepository).construct(use(ProductModel))
   })
 }
 
@@ -89,6 +93,6 @@ export default function ConfigDIC (): DIContainer {
   AddAuthDefinitions(container)
   AddUserDefinitions(container)
   AddProductDefinitions(container);
-  (container as IDIContainer).get('sequelize').sync()
+  (container as IDIContainer).get('sequelize').sync({force:true})
   return container
 }

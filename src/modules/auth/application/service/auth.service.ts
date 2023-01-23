@@ -47,7 +47,7 @@ export class AuthService {
 
 try{
  const user = await this.userService.getUserByEmail(signupDto.email)
- 
+
   if(user){
     throw new CredentialsTaken(`A user with email: ${signupDto.email} already exist`)
   }
@@ -71,7 +71,5 @@ catch(err){
    
   }
   
-  async getSession(req: Request<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>) {
-    throw new Error('Method not implemented.');
-  }
+
 }

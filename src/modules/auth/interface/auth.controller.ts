@@ -1,7 +1,6 @@
 
 
 import { Application, NextFunction, Request, Response } from 'express';
-
 import { LoginDto, SignupDto } from '../application/dto';
 import { AuthService } from '../application/service/auth.service';
 
@@ -43,9 +42,9 @@ export class AuthController {
   }
 
   
-  async getSession( req: Request) {
-    const token = await this.authService.getSession(req);
-    return token;
+  async getSession( req:Request, res: Response , next:NextFunction ) {
+   // const token = await this.authService.getSession(req);
+   // return token;
   }
 
 

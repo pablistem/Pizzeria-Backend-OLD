@@ -113,7 +113,6 @@ const AddProductDefinitions = (container: DIContainer): void => {
     ProductService: object(ProductService).construct(use(ProductRepository)),
     ProductRepository: object(ProductRepository).construct(use(ProductModel)),
     ProductModel: factory(configureProductModel),
-    ProductRepository: object(ProductRepository).construct(use(ProductModel)),
   });
 };
 

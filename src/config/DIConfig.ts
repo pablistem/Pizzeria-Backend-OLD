@@ -37,7 +37,7 @@ const dbConfig = (): Sequelize => {
   if (process.env.PROJECT_STATUS === "test") {
     const sequelize = new Sequelize({
       dialect: "sqlite",
-      storage: ":memory:",
+      storage: `./data/test/test${Math.random() * 1000}.db`,
       logging: false,
     });
     return sequelize;
@@ -87,8 +87,8 @@ const AddAuthDefinitions = (container: DIContainer): void => {
       use(AuthRepository),
       use(UserService)
     ),
-    AuthModel: factory(configureAuthModel),
     AuthRepository: object(AuthRepository).construct(use(AuthModel)),
+    AuthModel: factory(configureAuthModel),
   });
 };
 
@@ -99,8 +99,8 @@ const AddUserDefinitions = (container: DIContainer): void => {
       use(UserRepository)
     ),
     UserService: object(UserService).construct(use(UserRepository)),
-    UserModel: factory(configureUserModel),
     UserRepository: object(UserRepository).construct(use(UserModel)),
+    UserModel: factory(configureUserModel),
   });
 };
 
@@ -111,6 +111,7 @@ const AddProductDefinitions = (container: DIContainer): void => {
       use(ProductRepository)
     ),
     ProductService: object(ProductService).construct(use(ProductRepository)),
+    ProductRepository: object(ProductRepository).construct(use(ProductModel)),
     ProductModel: factory(configureProductModel),
     ProductRepository: object(ProductRepository).construct(use(ProductModel)),
   });

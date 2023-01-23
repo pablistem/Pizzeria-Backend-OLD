@@ -1,8 +1,9 @@
 
 
 import { Model, Sequelize, DataTypes } from 'sequelize'
+import { Auth } from '../domain/auth.entity'
 
-export class AuthModel extends Model<any> {
+export class AuthModel extends Model<Auth> {
   static setup (sequelizeInstance: Sequelize): typeof AuthModel {
     AuthModel.init(
       {
@@ -21,7 +22,7 @@ export class AuthModel extends Model<any> {
       {
         sequelize: sequelizeInstance,
         modelName: 'Auth',
-        tableName: 'auth',
+        tableName: 'auths',
         underscored: true,
         paranoid: true
       }

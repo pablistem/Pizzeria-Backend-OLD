@@ -13,8 +13,9 @@ export class UserService {
 
 
   async getUserByEmail(email: string):Promise<User> {
+  
    const user =  await this.userRepository.getUserByEmail(email)
- 
+    console.log(user)
    if(!user){
     throw new UserNotFound(`User with email ${email} does not exits`)
    }

@@ -7,9 +7,9 @@ export class AuthRepository implements IAuthRepository {
   constructor (authModel: AuthModel) {
     this.authModel = authModel as any
   }
-  async saveRefreshToken (token: string): Promise<Auth> {
+  async saveRefreshToken (session: Auth): Promise<Auth> {
 
-    const savedToken = this.authModel.build({ refreshToken: token })
+    const savedToken = this.authModel.build({ refreshToken: session.refreshToken})
 
     await savedToken.save()
 
@@ -17,8 +17,8 @@ export class AuthRepository implements IAuthRepository {
     return fromAuthModeltoEntity(savedToken)
   }
 
-  async removeRefreshToken (token: string): Promise<void> {
-    await this.authModel.destroy({ where: { refreshToken: token } })
+  async removeRefreshToken (session: Auth): Promise<void> {
+    await this.authModel.destroy({ where: { refreshToken: session.refreshToken } })
   }
  
 }

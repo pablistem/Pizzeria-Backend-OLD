@@ -29,7 +29,7 @@ return function   ( target:Object, propertyKey:string, descriptor:PropertyDescri
               throw new Unauthorized()
             }
            
-            args[0] .user = user  
+            args[0].user = user  
                       
           })
              

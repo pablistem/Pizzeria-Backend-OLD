@@ -1,16 +1,18 @@
 
 import { UserService } from '../../../user/application/service/user.service';
 import { LoginDto, SignupDto } from '../dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { IAuthRepository } from '../repository/auth.repository.interface';
 import { RoleEnum, User } from '../../../user/domain/user.entity';
 import * as argon2 from 'argon2';
 import { UserNotFound } from '../../../user/application/error/UserNotFound';
-import {CredentialsTaken, WrongPassword} from '../error';
+import {CredentialsTaken, InvalidRefreshToken, WrongPassword} from '../error';
 import jwt from 'jsonwebtoken'
+import { Auth } from '../../domain/auth.entity';
 
 
 export class AuthService {
+
  
   constructor(
     private readonly authRepository: IAuthRepository,
@@ -33,14 +35,18 @@ export class AuthService {
   }
 
 
-  getAccessToken(user:User):string {
+ private getAccessToken(user:User):string {
 
   const accessToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, String(process.env.ACCESS_TOKEN_SECRET), { expiresIn: 60 * 15 })
 
   return accessToken
   }
 
+ private getRefreshToken(user:User):string{
+  const accessToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, String(process.env.REFRESH_TOKEN_SECRET), { expiresIn: 60 * 60 * 24 * 14 })
 
+  return accessToken
+  }
 
 
   async signup(signupDto: SignupDto) {
@@ -63,13 +69,37 @@ catch(err){
     throw err
   }
 }
-    
-  
 
-   
-   
-   
   }
-  
 
+
+  async refreshToken (refreshToken: string, res: Response): Promise<{ accessToken: string }> {
+    await this.authRepository.removeRefreshToken(new Auth(refreshToken))
+
+    let userToRefresh: any
+
+    jwt.verify(refreshToken, String(process.env.REFRESH_TOKEN_SECRET), (err, user) => {
+      if (err != null) { throw new InvalidRefreshToken() }
+
+      userToRefresh = user
+    })
+
+    const user = await this.userService.getUserByEmail(userToRefresh.email)
+    const accessToken =  this.getAccessToken(user)
+
+    return {accessToken}
+  }
+
+  async logout (refreshToken: string): Promise<void> {
+    await this.authRepository.removeRefreshToken(new Auth(refreshToken))
+  }
+
+  private async setCookies (res: Response, refreshToken: string): Promise<void> {
+    res.cookie(String(process.env.HTTPONLY_COOKIE_NAME), refreshToken, {
+      httpOnly: true,
+      secure: true,
+      path: '/auth/session',
+      expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000)
+    })
+  }
 }

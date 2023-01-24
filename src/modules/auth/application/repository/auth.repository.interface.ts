@@ -5,9 +5,9 @@ import { Auth } from "../../domain/auth.entity"
 
 export interface IAuthRepository {
 
-  saveRefreshToken (token: string): Promise<Auth>
+  saveRefreshToken (token: Auth): Promise<Auth>
   
-  removeRefreshToken (token: string): Promise<void> 
+  removeRefreshToken (token: Auth): Promise<void> 
    
    
   

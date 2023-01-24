@@ -7,7 +7,7 @@ import AppBootstrapper from '../../../../__test__/appBootstrapper'
 describe('POST /auth/signup  register user',()=>{
 let app:Application
 
-    const { testApp } = AppBootstrapper()
+    const { testApp, container } = AppBootstrapper()
     app = testApp
 
 
@@ -34,8 +34,6 @@ it('gives a email validation error when no password field ', async ()=>{
   expect(response.statusCode).toEqual(400)
 
 })
-
-
 
 
 

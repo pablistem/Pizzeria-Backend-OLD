@@ -2,6 +2,8 @@
 
 import { Application, NextFunction, Request, Response } from 'express';
 import { LoginDto, SignupDto } from '../application/dto';
+import { InvalidRefreshToken } from '../application/error';
+
 import { AuthService } from '../application/service/auth.service';
 
 
@@ -14,6 +16,7 @@ export class AuthController {
   configureRoutes(app: Application){
     app.post(`${this.baseRoute}/login`, this.login.bind(this));
     app.post(`${this.baseRoute}/signup`, this.signup.bind(this));
+    app.post(`${this.baseRoute}/session`, this.refreshSession.bind(this));
  
   }
 
@@ -30,6 +33,8 @@ export class AuthController {
     }
    
   }
+
+
   async signup( req:Request, res: Response , next:NextFunction) {
     const signupDto = new SignupDto(req.body)
     try{
@@ -42,11 +47,39 @@ export class AuthController {
   }
 
   
-  async getSession( req:Request, res: Response , next:NextFunction ) {
-   // const token = await this.authService.getSession(req);
-   // return token;
+  async refreshSession( req:Request, res: Response , next:NextFunction ) {
+    const cookie = req.headers.cookie
+    try {
+      if (cookie === undefined) {
+        throw new InvalidRefreshToken()
+      }
+      if (req.body.logout === true) { return await this.logout(req, res, next) }
+      const httpOnlyToken: string = cookie?.split('=')[1]
+
+      const newAccesToken = await this.authService.refreshToken(httpOnlyToken, res)
+
+      res.status(200)
+      res.json({access_token:newAccesToken})
+    } catch (err) {
+      next(err)
+    }
   }
 
 
+  async logout (req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const cookie = req.headers.cookie
+      res.clearCookie(String(process.env.HTTPONLY_COOKIE_NAME), { httpOnly: true, secure: true, path: '/auth/session' })
+
+      const httpOnlyToken = cookie?.split('=')[1]
+
+      await this.authService.logout(httpOnlyToken as string)
+
+      res.status(200)
+      res.send()
+    } catch (err) {
+      next(err)
+    }
+  }
 
 }

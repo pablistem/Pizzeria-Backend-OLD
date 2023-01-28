@@ -24,6 +24,7 @@ import {
   MessageController,
 } from "../modules/message/message.module";
 import { MessageModel } from "../modules/message/infrastructure/message.model";
+import SetDataAssociations from "./data_associations";
 
 const dbConfig = (): Sequelize => {
   if (process.env.PROJECT_STATUS === "development") {
@@ -136,5 +137,6 @@ export default function ConfigDIC(): DIContainer {
   AddProductDefinitions(container);
   AddMessageDefinitions(container);
   (container as IDIContainer).get("sequelize").sync();
+  SetDataAssociations(container as IDIContainer);
   return container;
 }

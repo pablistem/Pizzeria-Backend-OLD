@@ -24,7 +24,7 @@ export class UserModel extends Model<any> {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        verified:{
+        verified: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
         },

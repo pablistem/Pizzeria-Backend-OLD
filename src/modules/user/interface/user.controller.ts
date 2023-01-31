@@ -7,13 +7,12 @@ import { UserDto } from "../application/dto/user.dto";
 import { fromUserDtoToEntity } from "../application/mapper/fromUserDtoToEntity";
 import { Authenticate } from "../../auth/application/guard/auth.guard";
 
-
 export class UserController {
   baseRoute = "/user";
- 
+
   constructor(
     public userService: UserService,
-    public userRepository: IUserRepository,
+    public userRepository: IUserRepository
   ) {}
 
   configureRoutes(app: Application): void {
@@ -23,28 +22,21 @@ export class UserController {
     app.delete(`${this.baseRoute}/:id`, this.deleteUser.bind(this));
   }
 
-
-
- @Authenticate()
+  @Authenticate()
   async getAllUsers(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    
     try {
-    
-     console.log(this)
-     // const user= await this.userService.getUserById(1)
-     // const users = await this.userRepository.getAllUser();
-      res.json({ok:'ok'})
-    
+      console.log(this);
+      // const user= await this.userService.getUserById(1)
+      // const users = await this.userRepository.getAllUser();
+      res.json({ ok: "ok" });
     } catch (error) {
       next(error);
     }
   }
-
-
 
   async getUserById(
     req: Request,
@@ -70,13 +62,14 @@ export class UserController {
     const { id } = req.params;
     const { body } = req;
 
-    const userDto = new UserDto({...body, id:id})
-    
+    const userDto = new UserDto({ ...body, id: id });
+
     try {
+      userDto.validate();
 
-      userDto.validate()
-
-      const userUpdated = await this.userService.updateUser(fromUserDtoToEntity(userDto));
+      const userUpdated = await this.userService.updateUser(
+        fromUserDtoToEntity(userDto)
+      );
 
       res.json(fromEntityToUserDto(userUpdated));
     } catch (error) {

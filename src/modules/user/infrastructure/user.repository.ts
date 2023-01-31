@@ -26,13 +26,8 @@ export class UserRepository implements IUserRepository {
       isNewRecord: Number.isNaN(user.id),
     });
 
-  
-    
-
     return fromModelToEntity(savedUser);
   }
-
-
 
   async deleteUser(id: number): Promise<User | null> {
     const userDeleted = await this.userModel.destroy({ where: { id } });
@@ -41,11 +36,11 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
-    console.log(email)
+    console.log(email);
     const user = await this.userModel.findOne({ where: { email } });
-   
-    if(user === null){
-      return null
+
+    if (user === null) {
+      return null;
     }
     return fromModelToEntity(user);
   }

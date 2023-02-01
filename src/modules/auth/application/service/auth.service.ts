@@ -6,7 +6,7 @@ import { IAuthRepository } from '../repository/auth.repository.interface';
 import { RoleEnum, User } from '../../../user/domain/user.entity';
 import * as argon2 from 'argon2';
 import { UserNotFound } from '../../../user/application/error/UserNotFound';
-import {CredentialsTaken, InvalidRefreshToken, WrongPassword} from '../error';
+import {CredentialsTaken, InvalidRefreshToken, Unauthorized, WrongPassword} from '../error';
 import jwt from 'jsonwebtoken'
 import { Auth } from '../../domain/auth.entity';
 import { MessageService } from '../../../message/message.module';
@@ -71,7 +71,8 @@ export class AuthService {
           const hash =  await argon2.hash(signupDto.password)
           const newUser = new User(signupDto.email,'name',undefined,hash,true,RoleEnum.user)
           await this.userService.addUser(newUser)
-          await this.messageService.sendMail('pizzería don rémolo verificacion de email', signupDto.email,' ')
+         // const urlWithToken = jwt.sign({ id: newUser.id, email: newUser.email }, String(process.env.VERIFY_TOKEN_SECRET), { expiresIn: 60 * 60 * 24 * 14 })
+         // await this.messageService.sendMail('pizzería don rémolo verificacion de email', signupDto.email,`http://localhost:${process.env.PORT}/auth/verify/${urlWithToken}`)
         }
       else{
     throw err
@@ -110,4 +111,22 @@ export class AuthService {
       expires: new Date(new Date().getTime() + 60 * 60 * 24 * 14 * 1000)
     })
   }
+
+
+ async verifyUser(token: string):Promise<void> {
+  jwt.verify(token, String(process.env.VERIFY_TOKEN_SECRET), async (err, user: any) => {
+    
+    if (err != null) {
+      throw new Unauthorized()
+    }
+    
+    const userToVerify = await this.userService.getUserByEmail( user.email )
+
+    userToVerify.verified = true
+
+    await this.userService.updateUser(userToVerify)
+              
+  })
+  }
+
 }

@@ -17,6 +17,7 @@ export class AuthController {
     app.post(`${this.baseRoute}/login`, this.login.bind(this));
     app.post(`${this.baseRoute}/signup`, this.signup.bind(this));
     app.post(`${this.baseRoute}/session`, this.refreshSession.bind(this));
+    app.get(`${this.baseRoute}/verify/:token`,this.verifyUser.bind(this))
  
   }
 
@@ -80,6 +81,24 @@ export class AuthController {
     } catch (err) {
       next(err)
     }
+  }
+
+
+  async verifyUser(req: Request, res: Response, next: NextFunction){
+
+
+    const {token} = req.params
+
+    try {
+  
+      await this.authService.verifyUser(token)
+      
+      res.status(201)
+      res.send()
+    } catch (err) {
+      next(err)
+    }
+
   }
 
 }

@@ -12,10 +12,10 @@ export class MessageService {
       to: to, // Change to your recipient
       from: 'pizzadonremolo@gmail.com', // Change to your verified sender
       subject: subject,
-      text: template,
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      text: 'hola',
+      html: `<strong><h1>Verificá tu cuenta haciendo click </h1><a href="${template}">Acá</a><p>${template}</p></strong>`,
     }
-    /*
+   
     this.mailingProvider
       .send(msg)
       .then(() => {
@@ -24,8 +24,8 @@ export class MessageService {
       .catch((error) => {
       console.error(error)
     })
-  }
-   */
+  
+   
  return true
 }
 

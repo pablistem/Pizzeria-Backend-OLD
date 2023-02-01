@@ -1,3 +1,5 @@
+
+import { UserModel } from "../../user/infrastructure/user.model"
 import { fromAuthModeltoEntity } from "../application/mapper/fromAuthModelToEntity"
 import { IAuthRepository } from "../application/repository/auth.repository.interface"
 import { Auth } from "../domain/auth.entity"
@@ -8,17 +10,21 @@ export class AuthRepository implements IAuthRepository {
     this.authModel = authModel as any
   }
   async saveRefreshToken (session: Auth): Promise<Auth> {
-
-    const savedToken = this.authModel.build({ refreshToken: session.refreshToken})
-
+   
+  
+    const savedToken = this.authModel.build(session as any, 
+    {isNewRecord: !session.id})
+     
+    savedToken.setDataValue('userId',session.user.id)
+  
     await savedToken.save()
 
-
+    
     return fromAuthModeltoEntity(savedToken)
   }
 
-  async removeRefreshToken (session: Auth): Promise<void> {
-    await this.authModel.destroy({ where: { refreshToken: session.refreshToken } })
+  async removeRefreshToken (token:string): Promise<void> {
+    await this.authModel.destroy({ where: { refreshToken: token } })
   }
  
 }

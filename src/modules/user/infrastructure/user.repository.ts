@@ -22,9 +22,12 @@ export class UserRepository implements IUserRepository {
   }
 
   async saveUser(user: User): Promise<User> {
-    const savedUser = this.userModel.create(user as any, {
-      isNewRecord: Number.isNaN(user.id),
+
+    const savedUser = this.userModel.build({...user} as any, {
+      isNewRecord: !user.id,
     });
+
+   await savedUser.save()
 
     return fromModelToEntity(savedUser);
   }

@@ -7,7 +7,7 @@ export interface IAuthRepository {
 
   saveRefreshToken (token: Auth): Promise<Auth>
   
-  removeRefreshToken (token: Auth): Promise<void> 
+  removeRefreshToken (token: string): Promise<void> 
    
    
   

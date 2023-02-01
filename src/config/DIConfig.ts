@@ -86,6 +86,7 @@ const AddAuthDefinitions = (container: DIContainer): void => {
     AuthController: object(AuthController).construct(use(AuthService)),
     AuthService: object(AuthService).construct(
       use(AuthRepository),
+      use(MessageService),
       use(UserService)
     ),
     AuthRepository: object(AuthRepository).construct(use(AuthModel)),

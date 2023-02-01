@@ -25,7 +25,7 @@ export class AuthController {
     try{
       loginDto.validate()
 
-      const access_token = await this.authService.login(loginDto)
+      const access_token = await this.authService.login(res,loginDto)
       res.json({access_token});
     }
     catch(err){

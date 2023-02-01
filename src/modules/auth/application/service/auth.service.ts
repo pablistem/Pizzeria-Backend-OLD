@@ -9,6 +9,7 @@ import { UserNotFound } from '../../../user/application/error/UserNotFound';
 import {CredentialsTaken, InvalidRefreshToken, WrongPassword} from '../error';
 import jwt from 'jsonwebtoken'
 import { Auth } from '../../domain/auth.entity';
+import { MessageService } from '../../../message/message.module';
 
 
 export class AuthService {
@@ -16,10 +17,11 @@ export class AuthService {
  
   constructor(
     private readonly authRepository: IAuthRepository,
+    private messageService: MessageService,
     private userService: UserService,
    
   ) {}
-  async login(loginDto: LoginDto) {
+  async login(res:Response ,loginDto: LoginDto) {
 
     const user = await this.userService.getUserByEmail(loginDto.email)
 
@@ -28,6 +30,12 @@ export class AuthService {
     if(!match){
       throw new WrongPassword()
     }
+
+    const session = new Auth(this.getRefreshToken(user),user)
+
+    await this.authRepository.saveRefreshToken(session)
+
+    await this.setCookies(res,session.refreshToken)
 
     const access_token =  this.getAccessToken(user)
 
@@ -51,30 +59,30 @@ export class AuthService {
 
   async signup(signupDto: SignupDto) {
 
-try{
- const user = await this.userService.getUserByEmail(signupDto.email)
+    try{
+      const user = await this.userService.getUserByEmail(signupDto.email)
 
-  if(user){
-    throw new CredentialsTaken(`A user with email: ${signupDto.email} already exist`)
-  }
-}
-catch(err){
-  if(err instanceof UserNotFound){
-    const hash =  await argon2.hash(signupDto.password)
-    const newUser = new User(signupDto.email,'name',undefined,hash,false,RoleEnum.user)
-   
-    await this.userService.addUser(newUser)
-  }
-  else{
+      if(user){
+        throw new CredentialsTaken(`A user with email: ${signupDto.email} already exist`)
+      }
+    }
+    catch(err){
+      if(err instanceof UserNotFound){
+          const hash =  await argon2.hash(signupDto.password)
+          const newUser = new User(signupDto.email,'name',undefined,hash,true,RoleEnum.user)
+          await this.userService.addUser(newUser)
+          await this.messageService.sendMail('pizzería don rémolo verificacion de email', signupDto.email,' ')
+        }
+      else{
     throw err
+    }
   }
-}
 
   }
 
 
   async refreshToken (refreshToken: string, res: Response): Promise<{ accessToken: string }> {
-    await this.authRepository.removeRefreshToken(new Auth(refreshToken))
+    await this.authRepository.removeRefreshToken(refreshToken)
 
     let userToRefresh: any
 
@@ -91,7 +99,7 @@ catch(err){
   }
 
   async logout (refreshToken: string): Promise<void> {
-    await this.authRepository.removeRefreshToken(new Auth(refreshToken))
+    await this.authRepository.removeRefreshToken(refreshToken)
   }
 
   private async setCookies (res: Response, refreshToken: string): Promise<void> {

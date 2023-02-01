@@ -3,7 +3,7 @@
 import { Model, Sequelize, DataTypes } from 'sequelize'
 import { Auth } from '../domain/auth.entity'
 
-export class AuthModel extends Model<Auth> {
+export class AuthModel extends Model {
   static setup (sequelizeInstance: Sequelize): typeof AuthModel {
     AuthModel.init(
       {
@@ -18,6 +18,10 @@ export class AuthModel extends Model<Auth> {
           type: DataTypes.STRING,
           allowNull: false
         },
+        userId: {
+          type: DataTypes.NUMBER,
+          allowNull: false,
+        }
       },
       {
         sequelize: sequelizeInstance,

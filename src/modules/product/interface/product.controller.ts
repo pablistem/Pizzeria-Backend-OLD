@@ -76,7 +76,7 @@ export class ProductController {
     const { id } = req.params;
     const { body } = req;
 
-    const productDto = new ProductDto({ ...body, id: id });
+    const productDto = new ProductDto({ ...body, id });
 
     try {
       productDto.validate();

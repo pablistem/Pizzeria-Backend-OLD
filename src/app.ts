@@ -9,6 +9,7 @@ import cors from "cors";
 import { initProductModule } from "./modules/product/product.module";
 import { initAuthModule } from "./modules/auth/auth.module";
 import { initMessageModule } from "./modules/message/message.module";
+import { initItemModule } from "./modules/item/item.module";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 const app = express();
@@ -25,6 +26,7 @@ initAuthModule(app, container);
 initUserModule(app, container);
 initProductModule(app, container);
 initMessageModule(app, container);
+initItemModule(app, container);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

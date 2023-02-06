@@ -13,7 +13,7 @@ export class UserDto {
     id: number;
     email: string;
     name: string;
-    verified: boolean | undefined;
+    verified?: boolean | undefined;
   }) {
     this.id = id;
     this.email = email;

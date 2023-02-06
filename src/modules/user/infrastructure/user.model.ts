@@ -24,6 +24,14 @@ export class UserModel extends Model<any> {
           type: DataTypes.STRING,
           allowNull: false,
         },
+        verified: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+        },
+        role: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
       },
       {
         sequelize: sequelizeInstance,

@@ -22,26 +22,29 @@ export class UserRepository implements IUserRepository {
   }
 
   async saveUser(user: User): Promise<User> {
-    const savedUser = await this.userModel.create(user as any, {
-      isNewRecord: Number.isNaN(user.id),
+
+    const savedUser = this.userModel.build({...user} as any, {
+      isNewRecord: !user.id,
     });
 
+   await savedUser.save()
+
     return fromModelToEntity(savedUser);
-  }
-
-  async updateUser(id: number, body: Object): Promise<User | null> {
-    const userUpdated = await this.userModel.findOne({ where: { id } });
-
-    userUpdated?.set(body);
-
-    await userUpdated?.save();
-
-    return userUpdated === null ? null : fromModelToEntity(userUpdated);
   }
 
   async deleteUser(id: number): Promise<User | null> {
     const userDeleted = await this.userModel.destroy({ where: { id } });
 
     return userDeleted === null ? null : fromModelToEntity(userDeleted);
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    console.log(email);
+    const user = await this.userModel.findOne({ where: { email } });
+
+    if (user === null) {
+      return null;
+    }
+    return fromModelToEntity(user);
   }
 }

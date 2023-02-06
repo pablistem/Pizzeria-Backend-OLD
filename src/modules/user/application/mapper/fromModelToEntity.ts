@@ -6,15 +6,19 @@ export const fromModelToEntity = ({
   name,
   hash,
   verified,
+  role,
   createdAt,
   updatedAt,
 }: any): User => {
+
+ 
   const userEntity = new User(
-    id,
     email,
     name,
+    id,
     hash,
     verified,
+    role,
     createdAt,
     updatedAt
   );

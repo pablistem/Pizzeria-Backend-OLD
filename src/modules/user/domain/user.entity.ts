@@ -1,26 +1,41 @@
+import { Auth } from "../../auth/domain/auth.entity";
+
+export enum RoleEnum {
+  admin = 'admin',
+  user = 'user',
+} 
+
+
 export class User {
-  id: number | undefined;
   email: string;
-  name: string;
-  hash: string;
+  name: string ;
+  id: number | undefined;
+  hash: string | undefined;
   verified: boolean | undefined;
+  role:string | undefined
+  sessions: Auth[] | undefined
   createdAt: string | undefined;
   updatedAt: string | undefined;
 
   constructor(
-    id: number | undefined,
     email: string,
     name: string,
-    hash: string,
+    id?: number | undefined,
+    hash?: string | undefined,
     verified?: boolean | undefined,
+    role?: string | undefined,
+    sessions?: Auth[] | undefined,
     createdAt?: string | undefined,
-    updatedAt?: string | undefined
+    updatedAt?: string | undefined,
+    
   ) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.hash = hash;
     this.verified = verified;
+    this.role = role;
+    this.sessions = sessions;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

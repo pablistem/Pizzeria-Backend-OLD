@@ -1,8 +1,8 @@
 import { Model, Sequelize, DataTypes } from "sequelize";
 
-export class ProductModel extends Model<any> {
-  static setup(sequelizeInstance: Sequelize): typeof ProductModel {
-    ProductModel.init(
+export class ItemModel extends Model<any> {
+  static setup(sequelizeInstance: Sequelize): typeof ItemModel {
+    ItemModel.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -11,39 +11,40 @@ export class ProductModel extends Model<any> {
           allowNull: false,
           unique: true,
         },
-        name: {
-          type: DataTypes.STRING,
+        quntity: {
+          type: DataTypes.NUMBER,
           allowNull: false,
         },
-        description: {
-          type: DataTypes.STRING,
+        unitPrice: {
+          type: DataTypes.NUMBER,
           allowNull: false,
         },
-        image: {
-          type: DataTypes.STRING,
+        discount: {
+          type: DataTypes.NUMBER,
           allowNull: false,
         },
-        categoryId: {
+        subTotal: {
+          type: DataTypes.NUMBER,
+          allowNull: false,
+        },
+        orderId: {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
-        price: {
-          type: DataTypes.NUMBER,
-          allowNull: false,
-        },
-        stock: {
-          type: DataTypes.NUMBER,
+        productId: {
+          type: DataTypes.INTEGER,
           allowNull: false,
         },
       },
       {
         sequelize: sequelizeInstance,
-        modelName: "Product",
-        tableName: "Products",
+        modelName: "Item",
+        tableName: "items",
         underscored: true,
         paranoid: true,
       }
     );
-    return ProductModel;
+
+    return ItemModel;
   }
 }

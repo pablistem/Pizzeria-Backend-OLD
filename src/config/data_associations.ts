@@ -5,6 +5,7 @@ import { OrderModel } from "../modules/order/infrastructure/order.model";
 import { ProductModel } from "../modules/product/infrastructure/product.model";
 import { UserModel } from "../modules/user/infrastructure/user.model";
 
+
 export default function SetDataAssociations(container: IDIContainer): void {
   const user: typeof UserModel = container.get("UserModel");
   const auth: typeof AuthModel = container.get("AuthModel");

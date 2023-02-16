@@ -1,7 +1,7 @@
-import { Model, Sequelize, DataTypes } from 'sequelize'
+import { Model, Sequelize, DataTypes } from "sequelize";
 
 export class ItemModel extends Model<any> {
-  static setup (sequelizeInstance: Sequelize): typeof ItemModel {
+  static setup(sequelizeInstance: Sequelize): typeof ItemModel {
     ItemModel.init(
       {
         id: {
@@ -9,33 +9,42 @@ export class ItemModel extends Model<any> {
           primaryKey: true,
           autoIncrement: true,
           allowNull: false,
-          unique: true
+          unique: true,
         },
-        orderId: {
-          type: DataTypes.INTEGER,
-          allowNull: false
+        quantity: {
+          type: DataTypes.NUMBER,
+          allowNull: false,
         },
-        productId: {
-          type: DataTypes.INTEGER,
-          allowNull: false
+        unitPrice: {
+          type: DataTypes.NUMBER,
+          allowNull: false,
         },
         discount: {
           type: DataTypes.NUMBER,
-          allowNull: false
+          allowNull: false,
         },
         subTotal: {
-            type: DataTypes.NUMBER,
-            allowNull: false
-          }
+          type: DataTypes.NUMBER,
+          allowNull: false,
+        },
+        orderId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        productId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
       },
       {
         sequelize: sequelizeInstance,
-        modelName: 'Item',
-        tableName: 'items',
+        modelName: "Item",
+        tableName: "items",
         underscored: true,
-        paranoid: false
+        paranoid: true,
       }
-    )
-    return ItemModel
+    );
+
+    return ItemModel;
   }
 }

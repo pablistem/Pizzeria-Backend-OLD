@@ -27,8 +27,14 @@ import { MessageModel } from "../modules/message/infrastructure/message.model";
 import SetDataAssociations from "./data_associations";
 import { OrderModel } from "../modules/order/infrastructure/order.model";
 import { OrderController, OrderService, OrderRepository } from "../modules/order/order.module";
-import { ItemModel } from "../modules/item/infrastructure/item.model";
 
+
+import { ItemModel } from "../modules/item/infrastructure/item.model";
+import {
+  ItemController,
+  ItemRepository,
+  ItemService,
+} from "../modules/item/item.module";
 
 const dbConfig = (): Sequelize => {
   if (process.env.PROJECT_STATUS === "development") {
@@ -146,12 +152,7 @@ const AddOrderDefinitions = (container: DIContainer): void => {
   });
 };
 
-const AddItemDefinitions = (container: DIContainer): void => {
-  container.add({
- 
-    ItemModel: factory(configureItemModel),
-  });
-};
+
 
 const AddMessageDefinitions = (container: DIContainer): void => {
   container.add({
@@ -165,6 +166,18 @@ const AddMessageDefinitions = (container: DIContainer): void => {
   });
 };
 
+const AddItemDefinitions = (container: DIContainer): void => {
+  container.add({
+    ItemController: object(ItemController).construct(
+      use(ItemService),
+      use(ItemRepository)
+    ),
+    ItemService: object(ItemService).construct(use(ItemRepository)),
+    ItemRepository: object(ItemRepository).construct(use(ItemModel)),
+    ItemModel: factory(configureItemModel),
+  });
+};
+
 export default function ConfigDIC(): DIContainer {
   const container = new DIContainer();
   AddCommonDefinitions(container);
@@ -174,6 +187,7 @@ export default function ConfigDIC(): DIContainer {
   AddItemDefinitions(container);
   AddOrderDefinitions(container);
   AddMessageDefinitions(container);
+  AddItemDefinitions(container);
   (container as IDIContainer).get("sequelize").sync();
   SetDataAssociations(container as IDIContainer);
   return container;

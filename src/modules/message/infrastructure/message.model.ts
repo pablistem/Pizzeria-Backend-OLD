@@ -24,7 +24,7 @@ export class MessageModel extends Model<any> {
       {
         sequelize: sequelizeInstance,
         modelName: "Message",
-        tableName: "Messages",
+        tableName: "messages",
         underscored: true,
         paranoid: true,
       }

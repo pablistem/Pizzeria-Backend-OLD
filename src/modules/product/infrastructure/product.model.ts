@@ -39,7 +39,7 @@ export class ProductModel extends Model<any> {
       {
         sequelize: sequelizeInstance,
         modelName: 'Product',
-        tableName: 'Products',
+        tableName: 'products',
         underscored: true,
         paranoid: true
       }

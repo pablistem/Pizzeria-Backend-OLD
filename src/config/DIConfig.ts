@@ -25,6 +25,10 @@ import {
 } from "../modules/message/message.module";
 import { MessageModel } from "../modules/message/infrastructure/message.model";
 import SetDataAssociations from "./data_associations";
+import { OrderModel } from "../modules/order/infrastructure/order.model";
+import { OrderController, OrderService, OrderRepository } from "../modules/order/order.module";
+import { ItemModel } from "../modules/item/infrastructure/item.model";
+
 
 const dbConfig = (): Sequelize => {
   if (process.env.PROJECT_STATUS === "development") {
@@ -69,10 +73,23 @@ const configureProductModel = (
   return ProductModel.setup(container.get("sequelize"));
 };
 
+const configureOrderModel = (
+  container: IDIContainer
+): typeof OrderModel => {
+  return OrderModel.setup(container.get("sequelize"));
+};
+
+
 const configureMessageModel = (
   container: IDIContainer
 ): typeof MessageModel => {
   return MessageModel.setup(container.get("sequelize"));
+};
+
+const configureItemModel = (
+  container: IDIContainer
+): typeof ItemModel => {
+  return ItemModel.setup(container.get("sequelize"));
 };
 
 const AddCommonDefinitions = (container: DIContainer): void => {
@@ -118,6 +135,24 @@ const AddProductDefinitions = (container: DIContainer): void => {
   });
 };
 
+const AddOrderDefinitions = (container: DIContainer): void => {
+  container.add({
+    OrderController: object(OrderController).construct(
+      use(OrderService),
+    ),
+    OrderService: object(OrderService).construct(use(OrderRepository)),
+    OrderRepository: object(OrderRepository).construct(use(OrderModel)),
+    OrderModel: factory(configureOrderModel),
+  });
+};
+
+const AddItemDefinitions = (container: DIContainer): void => {
+  container.add({
+ 
+    ItemModel: factory(configureItemModel),
+  });
+};
+
 const AddMessageDefinitions = (container: DIContainer): void => {
   container.add({
     MessageController: object(MessageController).construct(
@@ -136,6 +171,8 @@ export default function ConfigDIC(): DIContainer {
   AddAuthDefinitions(container);
   AddUserDefinitions(container);
   AddProductDefinitions(container);
+  AddItemDefinitions(container);
+  AddOrderDefinitions(container);
   AddMessageDefinitions(container);
   (container as IDIContainer).get("sequelize").sync();
   SetDataAssociations(container as IDIContainer);

@@ -11,7 +11,7 @@ export class ItemModel extends Model<any> {
           allowNull: false,
           unique: true,
         },
-        quntity: {
+        quantity: {
           type: DataTypes.NUMBER,
           allowNull: false,
         },

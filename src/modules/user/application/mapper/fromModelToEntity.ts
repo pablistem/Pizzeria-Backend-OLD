@@ -4,6 +4,7 @@ export const fromModelToEntity = ({
   id,
   email,
   name,
+  lastName,
   hash,
   verified,
   role,
@@ -15,6 +16,7 @@ export const fromModelToEntity = ({
   const userEntity = new User(
     email,
     name,
+    lastName,
     id,
     hash,
     verified,

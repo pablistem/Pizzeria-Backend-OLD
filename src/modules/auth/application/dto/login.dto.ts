@@ -4,12 +4,14 @@ import { ValidationError } from "../error/validation.error";
 
 export class LoginDto {
 
+
   email: string;
 
   password: string;
 
-  constructor({email, password}:{email:string, password:string}){
-    this.email = email
+  constructor({email, password}:{ email:string, password:string,}){
+
+    this.email = email.toLowerCase()
     this.password = password
   }
 

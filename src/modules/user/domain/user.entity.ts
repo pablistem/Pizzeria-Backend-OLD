@@ -8,7 +8,8 @@ export enum RoleEnum {
 
 export class User {
   email: string;
-  name: string ;
+  name: string;
+  lastName:string;
   id: number | undefined;
   hash: string | undefined;
   verified: boolean | undefined;
@@ -20,6 +21,7 @@ export class User {
   constructor(
     email: string,
     name: string,
+    lastName:string,
     id?: number | undefined,
     hash?: string | undefined,
     verified?: boolean | undefined,
@@ -32,6 +34,7 @@ export class User {
     this.id = id;
     this.email = email;
     this.name = name;
+    this.lastName = lastName;
     this.hash = hash;
     this.verified = verified;
     this.role = role;

@@ -20,6 +20,10 @@ export class UserModel extends Model<any> {
           type: DataTypes.STRING,
           allowNull: false,
         },
+        lastName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
         hash: {
           type: DataTypes.STRING,
           allowNull: false,

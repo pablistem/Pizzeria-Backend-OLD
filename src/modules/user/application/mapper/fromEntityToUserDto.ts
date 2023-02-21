@@ -5,7 +5,8 @@ export const fromEntityToUserDto = ({
   id,
   email,
   name,
+  lastName,
 }: User): UserDto => {
-  const userDto = new UserDto({ id: Number(id), email, name });
+  const userDto = new UserDto({ id: Number(id), email, name, lastName });
   return userDto;
 };

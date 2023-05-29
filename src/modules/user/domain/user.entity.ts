@@ -1,4 +1,5 @@
 import { Auth } from "../../auth/domain/auth.entity";
+import { Base } from "../../common/domain/base.entity";
 
 export enum RoleEnum {
   admin = 'admin',
@@ -6,17 +7,15 @@ export enum RoleEnum {
 } 
 
 
-export class User {
+export class User extends Base {
+  
   email: string;
   name: string;
   lastName:string;
-  id: number | undefined;
   hash: string | undefined;
   verified: boolean | undefined;
   role:string | undefined
   sessions: Auth[] | undefined
-  createdAt: string | undefined;
-  updatedAt: string | undefined;
 
   constructor(
     email: string,
@@ -29,9 +28,8 @@ export class User {
     sessions?: Auth[] | undefined,
     createdAt?: string | undefined,
     updatedAt?: string | undefined,
-    
   ) {
-    this.id = id;
+   super(id,createdAt,updatedAt)
     this.email = email;
     this.name = name;
     this.lastName = lastName;
@@ -39,7 +37,6 @@ export class User {
     this.verified = verified;
     this.role = role;
     this.sessions = sessions;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+  
   }
 }

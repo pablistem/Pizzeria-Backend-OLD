@@ -11,13 +11,13 @@ export const fromProductDtoToEntity = ({
   stock,
 }: ProductDto): Product => {
   const productEntity = new Product(
-    id,
     name,
     description,
     image,
     price,
     category,
-    stock
+    stock,
+    id,
   );
 
   return productEntity;

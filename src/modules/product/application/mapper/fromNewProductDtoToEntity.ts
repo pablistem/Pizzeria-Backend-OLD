@@ -11,7 +11,6 @@ export const fromNewProductDtoToEntity = ({
 
 }: NewProductDto): Product => {
   const productEntity = new Product(
-    undefined,
     name,
     description,
     image,

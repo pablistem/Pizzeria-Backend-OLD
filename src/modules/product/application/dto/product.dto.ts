@@ -1,56 +1,70 @@
+import Joi from 'joi';
 
 export class ProductDto {
-  id: number
-  name: string
-  description: string
-  image: string
-  category: string
-  price: number
-  stock: number
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  category: string;
+  price: number;
+  stock: number;
 
-  constructor ({
+  constructor({
     id,
     name,
     description,
     image,
     category,
     price,
-    stock
+    stock,
   }: {
-    id: number
-    name: string
-    description: string
-    image: string
-    category: string
-    price: number
-    stock: number }) {
-    this.id = id
-    this.name = name
-    this.description = description
-    this.image = image
-    this.category = category
-    this.price = price
-    this.stock = stock
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    category: string;
+    price: number;
+    stock: number;
+  }) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.image = image;
+    this.category = category;
+    this.price = price;
+    this.stock = stock;
   }
 
-  validate (): void {
-    if (this.name === undefined) {
-      throw new Error('Validation error')
-    }
-    if (this.description === undefined) {
-      throw new Error('Validation error')
-    }
-    if (this.image === undefined) {
-      throw new Error('Validation error')
-    }
-    if (this.category === undefined) {
-      throw new Error('Validation error')
-    }
-    if (this.price === undefined) {
-      throw new Error('Validation error')
-    }
-    if (this.stock === undefined) {
-      throw new Error('Validation error')
+  validate(): void {
+    const schema = Joi.object({
+      id: Joi.number().required().messages({
+        'any.required': 'ID is required',
+      }),
+      name: Joi.string().required().messages({
+        'any.required': 'Name is required',
+      }),
+      description: Joi.string().required().messages({
+        'any.required': 'Description is required',
+      }),
+      image: Joi.string().required().messages({
+        'any.required': 'Image is required',
+      }),
+      category: Joi.string().required().messages({
+        'any.required': 'Category is required',
+      }),
+      price: Joi.number().required().messages({
+        'any.required': 'Price is required',
+      }),
+      stock: Joi.number().required().messages({
+        'any.required': 'Stock is required',
+      }),
+    }).options({ abortEarly: false });
+
+    const { error } = schema.validate(this);
+
+    if (error) {
+      const errorMessage = error.details.map((detail) => detail.message).join('\n');
+      throw new Error('Validation error:\n' + errorMessage);
     }
   }
 }

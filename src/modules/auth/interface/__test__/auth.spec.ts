@@ -1,6 +1,7 @@
 import { Application } from 'express'
 import request from 'supertest'
 import AppBootstrapper from '../../../../__test__/appBootstrapper'
+import { SignupDto } from '../../application/dto'
 
 
 
@@ -14,7 +15,14 @@ let app:Application
 
 
 it('registers new user', async ()=>{
-  const response =  await request(app).post('/auth/signup').send({email:'user@email.com', password:'Qwerty1234'})
+
+  const signupDto = new SignupDto( {
+    email:'user@email.com', 
+    password:'Qwerty1234',
+    name: 'test',
+    lastName: 'test',
+  })
+  const response =  await request(app).post('/auth/signup').send(signupDto)
 
   expect(response.statusCode).toEqual(201)
 

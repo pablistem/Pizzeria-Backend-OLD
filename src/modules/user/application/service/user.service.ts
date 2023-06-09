@@ -30,9 +30,8 @@ export class UserService {
     if (!(user instanceof User)) {
       throw new UserEntityNotDefined();
     }
-    
+  
     const savedUser = await this.userRepository.saveUser(user);
-
     return savedUser;
   }
 

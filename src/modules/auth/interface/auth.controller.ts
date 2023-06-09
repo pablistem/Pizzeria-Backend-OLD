@@ -17,7 +17,7 @@ export class AuthController {
     app.post(`${this.baseRoute}/login`, this.login.bind(this));
     app.post(`${this.baseRoute}/signup`, this.signup.bind(this));
     app.post(`${this.baseRoute}/session`, this.refreshSession.bind(this));
-    app.get(`${this.baseRoute}/verify/:token`,this.verifyUser.bind(this))
+    app.get(`${this.baseRoute}/verify/:token`,this.verifyUser.bind(this));
  
   }
 

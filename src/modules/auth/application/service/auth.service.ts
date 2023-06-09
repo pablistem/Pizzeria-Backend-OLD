@@ -70,6 +70,7 @@ export class AuthService {
       if(err instanceof UserNotFound){
           const hash =  await argon2.hash(signupDto.password)
           const newUser = new User(signupDto.email,signupDto.name,signupDto.lastName,undefined,hash,true,RoleEnum.user)
+         
           await this.userService.addUser(newUser)
          // const urlWithToken = jwt.sign({ id: newUser.id, email: newUser.email }, String(process.env.VERIFY_TOKEN_SECRET), { expiresIn: 60 * 60 * 24 * 14 })
          // await this.messageService.sendMail('pizzería don rémolo verificacion de email', signupDto.email,`http://localhost:${process.env.PORT}/auth/verify/${urlWithToken}`)

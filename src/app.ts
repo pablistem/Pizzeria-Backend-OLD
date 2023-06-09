@@ -11,8 +11,7 @@ import { initAuthModule } from "./modules/auth/auth.module";
 import { initMessageModule } from "./modules/message/message.module";
 import { initOrderModule } from "./modules/order/order.module";
 import { initItemModule } from "./modules/item/item.module";
-import swaggerUI from 'swagger-ui-express';
-import swaggerJsDoc, { SwaggerDefinition } from 'swagger-jsdoc';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 const app = express();

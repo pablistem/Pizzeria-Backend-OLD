@@ -19,7 +19,6 @@ export class UserService {
    if(!user){
     throw new UserNotFound(`User with email ${email} does not exits`)
    }
-
    return user
   }
 
